@@ -19,8 +19,8 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.E2E_GITHUB_PAT }}
       GITHUB_REPOSITORY: elazamey/arabic-devops-e2e-test
       GITHUB_ALLOWED_REPOSITORIES: elazamey/arabic-devops-e2e-test
-      E2E_PR_NUMBER: "1"
-      E2E_FAILED_CI_PR: "2"
+      E2E_PR_NUMBER: "7"
+      E2E_FAILED_CI_PR: "6"
       E2E_UNPROTECTED_PR: "4"
       E2E_UNAUTHORIZED_REPOSITORY: elazamey/123git
       E2E_CONFIRM_MERGE: "YES"
