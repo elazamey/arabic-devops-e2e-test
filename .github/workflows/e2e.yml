@@ -1,17 +1,46 @@
 name: e2e
 
 on:
-  push:
+  workflow_dispatch:
   pull_request:
+    branches: [main]
+  push:
+    branches: [main, "e2e/**", "e2e-*"]
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
 
 jobs:
   e2e:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.E2E_GITHUB_PAT }}
+      GITHUB_REPOSITORY: elazamey/arabic-devops-e2e-test
+      GITHUB_ALLOWED_REPOSITORIES: elazamey/arabic-devops-e2e-test
+      E2E_PR_NUMBER: "1"
+      E2E_FAILED_CI_PR: "2"
+      E2E_UNPROTECTED_PR: "4"
+      E2E_UNAUTHORIZED_REPOSITORY: elazamey/123git
+      E2E_CONFIRM_MERGE: "YES"
+      AGENT_URL: http://127.0.0.1:8787
+      E2E_EVIDENCE_DIR: evidence/real-github-e2e
     steps:
       - uses: actions/checkout@v4
-      - name: e2e
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run local architecture tests
+        run: npm test
+      - name: Start agent
         run: |
-          if [ "${{ github.event.head_commit.message }}" = "e2e-fail" ]; then
-            exit 1
-          fi
-          echo "e2e check passed"
+          node server.mjs > /tmp/arabic-devops-agent.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8787/api/health && exit 0
+            sleep 1
+          done
+          cat /tmp/arabic-devops-agent.log
+          exit 1
+      - name: Run real GitHub E2E
+        run: npm run test:real
