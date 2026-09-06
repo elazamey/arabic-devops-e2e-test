@@ -1,0 +1,16 @@
+{
+  "name": "runtime-probe",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal Bun/Node runtime and outbound-network probe",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "start:bun": "bun index.js"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}
+
