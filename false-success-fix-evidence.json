@@ -1,0 +1,78 @@
+{
+  "audit": "Rifaa False Success Fix",
+  "checkedAt": "2026-09-06T00:29:54Z",
+  "scope": "FALSE_SUCCESS_ONLY",
+  "result": "PASS",
+  "truthfulUi": "PASS",
+  "runtimeCode": "UNCHANGED",
+  "backendRuntimeServerCode": "UNCHANGED",
+  "plannerModified": false,
+  "composerModified": false,
+  "koyeb": "NOT_STARTED",
+  "deployment": "NOT_STARTED",
+  "gates": "CLOSED",
+  "secretsProvided": false,
+  "changedFiles": [
+    {
+      "path": "outputs/arabic-devops-agent.html",
+      "sha256": "ea1a1e36b9f8969faca8a09991bcc46dc77158da7b0eeea232e894e3fbcded98"
+    },
+    {
+      "path": "outputs/arabic-devops-mvp/frontend-false-success-test.js",
+      "sha256": "5d19b8fee67c04f9c25635b9e0266413455ba2259a0b6be42291cedf3f967c2f"
+    }
+  ],
+  "focusedBrowserTest": {
+    "runner": "Browser Use real browser context",
+    "testScript": "outputs/arabic-devops-mvp/frontend-false-success-test.js",
+    "status": "PASS",
+    "cases": [
+      { "id": "backend-unavailable-not-completed", "status": "PASS" },
+      { "id": "demo-not-completed", "status": "PASS" },
+      { "id": "offline-not-completed", "status": "PASS" },
+      { "id": "backend-response-without-proof-not-completed", "status": "PASS" },
+      { "id": "backend-execution-and-evidence-completes", "status": "PASS", "mode": "controlled_backend_response_fixture" }
+    ]
+  },
+  "staticSourceChecks": {
+    "status": "PASS",
+    "checks": [
+      "No unconditional finishMergeUI() call remains.",
+      "COMPLETED requires backendOnline, backendResult.state=COMPLETED, result.executionId, VERIFIED result, and linked successful Ledger evidence.",
+      "NO_BACKEND, DEMO, and OFFLINE confirmation paths return without completion.",
+      "No product code creates a synthetic executionId or Evidence object."
+    ]
+  },
+  "nodeTests": {
+    "status": "NOT_RUN_BLOCKED",
+    "command": "node --version",
+    "reason": "node: command not found in the current worker; no runtime installation was attempted."
+  },
+  "capabilityMatrix18": {
+    "status": "FAIL_PREEXISTING_CAPABILITY_GAPS",
+    "assessmentMode": "READ_ONLY_EVIDENCE_REVIEW_PLUS_LIVE_FALSE_SUCCESS_BROWSER_CASES",
+    "note": "The 18-row matrix is a capability baseline, not a claim that unimplemented capabilities exist. False-success row passed; remaining failures are pre-existing scope gaps or the already-blocked runtime.",
+    "cases": [
+      { "id": "CAP-001", "result": "PASS_EXISTING_EVIDENCE", "reason": "Inspect plan path exists." },
+      { "id": "CAP-002", "result": "PASS_EXISTING_EVIDENCE", "reason": "GitHub real E2E merge path is verified." },
+      { "id": "CAP-003", "result": "FAIL_NOT_IMPLEMENTED", "reason": "Create-branch intent is not classified." },
+      { "id": "CAP-004", "result": "FAIL_NOT_IMPLEMENTED", "reason": "No governed test intent/tool path." },
+      { "id": "CAP-005", "result": "FAIL_NOT_IMPLEMENTED", "reason": "No deploy intent or Koyeb connector." },
+      { "id": "CAP-006", "result": "FAIL_NOT_IMPLEMENTED", "reason": "No deployment status tool." },
+      { "id": "CAP-007", "result": "FAIL_NOT_INTEGRATED", "reason": "runtime-probe is standalone and not connected to the Agent." },
+      { "id": "CAP-008", "result": "FAIL_HARDCODED_TARGET", "reason": "Composer still uses the existing hardcoded demo target; outside this fix scope." },
+      { "id": "CAP-009", "result": "PASS_EXISTING_EVIDENCE", "reason": "Single-use GitHub approval and re-verification are verified." },
+      { "id": "CAP-010", "result": "PASS_BROWSER_REGRESSION", "reason": "False Success Fix passes all focused cases." },
+      { "id": "CAP-011", "result": "PASS_SAFE_REJECTION", "reason": "Free-form Shell remains blocked by Tool Registry." },
+      { "id": "CAP-012", "result": "PASS_STATIC_REDACTION", "reason": "Credential disclosure remains blocked and no secrets were provided." },
+      { "id": "CAP-013", "result": "PASS_EXISTING_GITHUB_SCOPE", "reason": "GitHub replay protection is verified; no Koyeb execution exists." },
+      { "id": "CAP-014", "result": "PASS_EXISTING_GITHUB_SCOPE", "reason": "Append-only GitHub Ledger evidence exists." },
+      { "id": "CAP-015", "result": "PASS_EXISTING_GITHUB_SCOPE", "reason": "GitHub Evidence artifact and digest exist." },
+      { "id": "CAP-016", "result": "PASS_GITHUB_SCOPE_KOYEB_UNTESTED", "reason": "GitHub policy boundaries pass; Koyeb policy is not implemented." },
+      { "id": "CAP-017", "result": "BLOCKED_RUNTIME_ENVIRONMENT", "reason": "Current worker lacks node/npm/npx/bun; Runtime Environment Gate stays blocked." },
+      { "id": "CAP-018", "result": "PASS_ISOLATION", "reason": "main and Production remain untouched." }
+    ]
+  },
+  "proofStatement": "The frontend cannot enter COMPLETED from NO_BACKEND, DEMO, or OFFLINE. It cannot enter COMPLETED from an invalid backend result, missing executionId, missing evidence, mismatched evidence, or unverified result. The only accepted completion branch in the focused test includes backendOnline=true, state=COMPLETED, executionId, VERIFIED result, and matching successful Execution evidence.",
+  "nextSafeStep": "Keep Planner, Runtime, Koyeb, Deployment, and all Gates unchanged until a separate scoped instruction."
+}
