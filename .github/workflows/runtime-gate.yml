@@ -1,0 +1,39 @@
+name: runtime-gate
+
+'on':
+  workflow_dispatch:
+  push:
+    branches:
+      - false-success-fix
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: runtime-probe
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Start and probe runtime
+        run: |
+          node --version
+          npm --version
+          PORT=8080 PROBE_URL=https://example.com/ npm start > /tmp/runtime-probe.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid"' EXIT
+          for attempt in {1..30}; do
+            if curl -fsS http://127.0.0.1:8080/healthz > /tmp/healthz.json; then
+              break
+            fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8080/healthz > /tmp/healthz.json
+          curl -fsS http://127.0.0.1:8080/probe > /tmp/probe.json
+          node -e 'const fs=require("fs"); const health=JSON.parse(fs.readFileSync("/tmp/healthz.json")); const probe=JSON.parse(fs.readFileSync("/tmp/probe.json")); if (health.ok !== true) throw new Error("healthz failed"); if (probe.ok !== true) throw new Error("probe failed"); console.log(JSON.stringify({healthz: health, probe: probe}, null, 2));'
+
